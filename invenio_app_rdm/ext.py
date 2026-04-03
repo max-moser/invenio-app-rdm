@@ -14,6 +14,39 @@ from flask import request
 from flask_menu import current_menu
 from invenio_i18n import lazy_gettext as _
 
+try:
+    from flask_multiprofiler import MultiProfiler as BaseMultiProfiler
+
+    class MultiProfiler(BaseMultiProfiler):
+        """MultiProfiler extension, integrated into InvenioRDM."""
+
+        def init_config(self, app):
+            """Initialize configuration."""
+            app.config.setdefault(
+                "MULTIPROFILER_BASE_TEMPLATE", app.config["BASE_TEMPLATE"]
+            )
+
+            app.config.setdefault(
+                "MULTIPROFILER_IGNORED_ENDPOINTS",
+                [
+                    "static",
+                    "_debug_toolbar.static",
+                    r"profiler\..+",
+                    "invenio_formatter_badges.badge",
+                ],
+            )
+
+            super().init_config(app)
+
+except (ImportError, ModuleNotFoundError):
+
+    class MultiProfiler:
+        """Dummy profiler for entrypoints if Flask-MultiProfiler isn't installed."""
+
+        def __init__(self, app=None):
+            """Constructor."""
+
+
 from .communities_ui.views.ui import _show_browse_page
 
 
