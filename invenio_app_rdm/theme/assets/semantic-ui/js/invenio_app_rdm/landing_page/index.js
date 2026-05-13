@@ -88,6 +88,7 @@ if (sidebarCommunitiesManageDiv) {
   const pendingCommunitiesSearchConfig = JSON.parse(
     sidebarCommunitiesManageDiv.dataset.pendingCommunitiesSearchConfig
   );
+  const communities = JSON.parse(sidebarCommunitiesManageDiv.dataset.recordCommunities)
   const permissions = JSON.parse(sidebarCommunitiesManageDiv.dataset.permissions);
   const record = JSON.parse(sidebarCommunitiesManageDiv.dataset.record);
   const recordRequests = JSON.parse(sidebarCommunitiesManageDiv.dataset.recordRequests);
@@ -105,6 +106,7 @@ if (sidebarCommunitiesManageDiv) {
         recordRequests={recordRequests}
       >
         <CommunitiesManagement
+          communities={communities}
           userCommunitiesMemberships={userCommunitiesMemberships}
           recordCommunityEndpoint={recordCommunityEndpoint}
           recordUserCommunitySearchConfig={recordUserCommunitySearchConfig}
