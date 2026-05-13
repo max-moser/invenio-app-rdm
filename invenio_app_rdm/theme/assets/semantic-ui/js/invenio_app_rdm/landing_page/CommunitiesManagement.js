@@ -20,15 +20,11 @@ export class CommunitiesManagement extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
-      communities: undefined,
+      loading: false,
+      communities: props.communities,
       error: undefined,
       manageCommunitiesModalOpen: false,
     };
-  }
-
-  componentDidMount() {
-    this.getCommunities();
   }
 
   componentWillUnmount() {
@@ -168,4 +164,5 @@ CommunitiesManagement.propTypes = {
   userCommunitiesMemberships: PropTypes.object.isRequired,
   searchConfig: PropTypes.object.isRequired,
   record: PropTypes.object.isRequired,
+  communities: PropTypes.array.isRequired,
 };

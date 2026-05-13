@@ -232,6 +232,10 @@ def record_detail(
     record_versions = current_rdm_records.records_service.search_versions(
         g.identity, id_=record.id
     )
+    record_communities = current_rdm_records.record_communities_service.search(
+        g.identity, id_=record.id
+    )
+    record_communities = record_communities.to_dict()["hits"]["hits"]
 
     return render_community_theme_template(
         current_app.config.get("APP_RDM_RECORD_LANDING_PAGE_TEMPLATE"),
@@ -239,6 +243,7 @@ def record_detail(
         record=record,
         record_ui=record_ui,
         record_versions=record_versions,
+        record_communities=record_communities,
         files=files_dict,
         media_files=media_files_dict,
         user_communities_memberships=get_user_communities_memberships(),

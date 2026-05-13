@@ -94,6 +94,7 @@ if (sidebarCommunitiesManageDiv) {
         record={JSON.parse(recordCitationAppDiv.dataset.record)}
       >
         <CommunitiesManagement
+          communities={JSON.parse(sidebarCommunitiesManageDiv.dataset.recordCommunities)}
           userCommunitiesMemberships={JSON.parse(
             sidebarCommunitiesManageDiv.dataset.userCommunitiesMemberships
           )}

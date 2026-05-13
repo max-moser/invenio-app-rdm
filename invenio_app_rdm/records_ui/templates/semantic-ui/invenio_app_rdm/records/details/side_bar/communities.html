@@ -8,6 +8,7 @@
   data-record-community-search-config='{{ search_app_rdm_record_communities_config(app_id="InvenioAppRdm.RecordCommunitiesSuggestions", endpoint=record_ui['links']["communities-suggestions"]) | tojson }}'
   data-record-user-community-search-config='{{ search_app_rdm_record_user_communities_config(app_id="InvenioAppRdm.RecordUserCommunitiesSuggestions", endpoint=record_ui['links']["communities-suggestions"]) | tojson }}'
   data-permissions='{{ permissions | tojson }}'
+  data-record-communities='{{ record_communities | tojson }}'
   class="sidebar-container"
 >
 
