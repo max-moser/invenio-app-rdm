@@ -21,15 +21,10 @@ export class RecordCitationField extends Component {
     super(props);
 
     this.state = {
-      loading: true,
-      citation: "",
+      loading: false,
+      citation: props.citation || "",
       error: null,
     };
-  }
-
-  componentDidMount() {
-    const { record, defaultStyle, includeDeleted } = this.props;
-    this.getCitation(record, defaultStyle, includeDeleted);
   }
 
   componentWillUnmount() {
@@ -158,4 +153,5 @@ RecordCitationField.propTypes = {
   record: PropTypes.object.isRequired,
   defaultStyle: PropTypes.string.isRequired,
   includeDeleted: PropTypes.bool.isRequired,
+  citation: PropTypes.string,
 };

@@ -54,6 +54,7 @@ if (recordCitationAppDiv) {
   ReactDOM.render(
     <RecordCitationField
       record={JSON.parse(recordCitationAppDiv.dataset.record)}
+      citation={JSON.parse(recordCitationAppDiv.dataset.recordCitation)}
       styles={JSON.parse(recordCitationAppDiv.dataset.styles)}
       defaultStyle={JSON.parse(recordCitationAppDiv.dataset.defaultstyle)}
       includeDeleted={JSON.parse(recordCitationAppDiv.dataset.includeDeleted)}
