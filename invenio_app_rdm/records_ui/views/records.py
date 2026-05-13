@@ -229,12 +229,16 @@ def record_detail(
         else None
     )
     theme = resolved_community_ui.get("theme", {}) if resolved_community else None
+    record_versions = current_rdm_records.records_service.search_versions(
+        g.identity, id_=record.id
+    )
 
     return render_community_theme_template(
         current_app.config.get("APP_RDM_RECORD_LANDING_PAGE_TEMPLATE"),
         theme=theme,
         record=record,
         record_ui=record_ui,
+        record_versions=record_versions,
         files=files_dict,
         media_files=media_files_dict,
         user_communities_memberships=get_user_communities_memberships(),

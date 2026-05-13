@@ -1,24 +1,56 @@
 {#
   Copyright (C) 2020 CERN.
   Copyright (C) 2020 Northwestern University.
-  Copyright (C) 2021 TU Wien.
+  Copyright (C) 2021-2026 TU Wien.
   Copyright (C) 2022 New York University.
 
   Invenio RDM Records is free software; you can redistribute it and/or modify
   it under the terms of the MIT License; see LICENSE file for more details.
 -#}
 
+{# TODO check flow with disabled/missing DOIs #}
+{%- set parent_doi_url = record.links.parent_doi %}
+{%- set parent_doi_text = record.parent.pids.doi.identifier %}
 <div class="sidebar-container">
   <h2 class="ui medium top attached header mt-0">{{ _('Versions')}}</h2>
   <div id="record-versions" class="ui segment rdm-sidebar bottom attached pl-0 pr-0 pt-0">
     <div class="versions">
       <div id="recordVersions" data-record='{{ record_ui | tojson }}' data-preview='{{ is_preview | tojson }}'>
-        <div class="rel-p-1"></div>
-        <div class="ui fluid placeholder rel-mr-1 rel-ml-1"></div>
-        <div class="header">
-          <div class="line"></div>
-          <div class="line"></div>
-          <div class="line"></div>
+        <div class="ui divided list" role="list">
+          {%- for version in record_versions %}
+          {%- set doi_text = version.pids.doi.identifier %}
+          {%- set doi_url = version.links.doi %}
+          {%- set version_number = version.metadata.version or ("v" ~ version.versions.index) %}
+          {# TODO {%- set publication_date = record.publication_date_l10n_medium %} #}
+          {%- set publication_date = record.metadata.publication_date %}
+          {#- TODO different styling for active version #}
+          <div class="item" role="listitem">
+            <div class="left floated content">
+              <a href="{{ invenio_url_for('invenio_app_rdm_records.record_detail', pid_value=version.id) }}" class="text-break">Version {{ version_number }}</a>
+              <a href="{{ doi_url }}" class="doi text-muted">{{ doi_text }}</a>
+            </div>
+            <div class="right floated content">
+              <small class="text-muted">{{ publication_date }}</small>
+            </div>
+          </div>
+          {%- endfor %}
+
+          <div class="ui grid mt-0">
+            <div class="centered row">
+              <a href="{{ invenio_url_for('invenio_search_ui.search', q='parent.id:' ~ record.parent.id, sort='version', f='allversions:true') }}" class="font-small">View all {{ record_versions|length }} versions</a>
+            </div>
+          </div>
+
+          <div class="item parent-doi pr-0" role="listitem">
+            <div class="left floated content">
+              <p class="text-muted">
+                <strong>Cite all versions?</strong>
+                You can cite all versions by using the DOI <a href="{{ parent_doi_url }}">{{ parent_doi_text }}</a>.
+                This DOI represents all versions, and will always resolve to the latest one.
+                <a href="{{ invenio_url_for('invenio_app_rdm.help_versioning') }}">Read more</a>.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

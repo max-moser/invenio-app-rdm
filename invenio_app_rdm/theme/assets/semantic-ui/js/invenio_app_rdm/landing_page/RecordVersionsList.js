@@ -6,6 +6,8 @@
 // Invenio RDM Records is free software; you can redistribute it and/or modify it
 // under the terms of the MIT License; see LICENSE file for more details.
 
+// TODO remove this file, it got replaced with jinja
+
 import _get from "lodash/get";
 import React, { useEffect, useState } from "react";
 import { Grid, Icon, Message, Placeholder, List, Divider } from "semantic-ui-react";
