@@ -2,7 +2,7 @@
 // Copyright (C) 2020-2026 CERN.
 // Copyright (C) 2020-2021 Northwestern University.
 // Copyright (C) 2021 Graz University of Technology.
-// Copyright (C) 2023 TU Wien.
+// Copyright (C) 2023-2026 TU Wien.
 //
 // Invenio RDM Records is free software; you can redistribute it and/or modify it
 // under the terms of the MIT License; see LICENSE file for more details.
@@ -68,6 +68,7 @@ if (recordCitationAppDiv) {
   ReactDOM.render(
     <RecordCitationField
       recordLinks={JSON.parse(recordCitationAppDiv.dataset.recordLinks)}
+      citation={JSON.parse(recordCitationAppDiv.dataset.recordCitation)}
       styles={JSON.parse(recordCitationAppDiv.dataset.styles)}
       defaultStyle={JSON.parse(recordCitationAppDiv.dataset.defaultstyle)}
       includeDeleted={JSON.parse(recordCitationAppDiv.dataset.includeDeleted)}

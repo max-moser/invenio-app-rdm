@@ -1,7 +1,7 @@
 // This file is part of InvenioRDM
 // Copyright (C) 2021-2025 CERN.
 // Copyright (C) 2021 Graz University of Technology.
-// Copyright (C) 2021 TU Wien
+// Copyright (C) 2021-2026 TU Wien
 //
 // Invenio RDM Records is free software; you can redistribute it and/or modify it
 // under the terms of the MIT License; see LICENSE file for more details.
@@ -19,17 +19,21 @@ import { http } from "react-invenio-forms";
 export class RecordCitationField extends Component {
   constructor(props) {
     super(props);
+    const citation = props.citation || "";
 
     this.state = {
-      loading: true,
-      citation: "",
+      loading: citation === "",
+      citation: citation,
       error: null,
     };
   }
 
   componentDidMount() {
     const { recordLinks, defaultStyle, includeDeleted } = this.props;
-    this.getCitation(recordLinks, defaultStyle, includeDeleted);
+    const { citation } = this.state;
+    if (citation === "") {
+      this.getCitation(recordLinks, defaultStyle, includeDeleted);
+    }
   }
 
   async componentDidUpdate() {
@@ -165,4 +169,9 @@ RecordCitationField.propTypes = {
   recordLinks: PropTypes.object.isRequired,
   defaultStyle: PropTypes.string.isRequired,
   includeDeleted: PropTypes.bool.isRequired,
+  citation: PropTypes.string,
+};
+
+RecordCitationField.defaultProps = {
+  citation: "",
 };
