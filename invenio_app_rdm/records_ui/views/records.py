@@ -315,6 +315,31 @@ def record_detail(
         g.identity, id_=record.id
     )
     record_communities = record_communities.to_dict()["hits"]["hits"]
+    from invenio_i18n.proxies import current_i18n
+    from invenio_rdm_records.resources.serializers.csl import (
+        CSLJSONSerializer,
+        get_citation_string,
+        get_style_location,
+    )
+
+    # from invenio_rdm_records.resources.config import record_serializers
+    # serializers = current_app.config.get("RDM_RECORDS_SERIALIZERS", record_serializers)
+    default_style = current_app.config.get("RDM_CITATION_STYLES_DEFAULT", None)
+    # default_serializer = serializers.get(default_style, None)
+    # if not default_serializer:
+    #     print("AHA!!!!!")
+    #     print(default_style)
+
+    # record_citation = CSLJSONSerializer().dump_obj(record)
+    serializer = CSLJSONSerializer()
+    style = get_style_location(default_style)
+    record_citation = get_citation_string(
+        serializer.dump_obj(record.data),
+        record.id,
+        style,
+        locale=current_i18n.language,
+    )
+    # get_citation_string(json, id, style, locale)
 
     record_requests = (
         current_rdm_records.record_communities_service.get_record_requests(
@@ -357,6 +382,7 @@ def record_detail(
         record_ui=record_ui,
         record_versions=record_versions,
         record_communities=record_communities,
+        record_citation=record_citation,
         files=files_dict,
         media_files=media_files_dict,
         user_communities_memberships=get_user_communities_memberships(),
