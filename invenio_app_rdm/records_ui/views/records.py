@@ -315,32 +315,45 @@ def record_detail(
         else None
     )
     theme = resolved_community_ui.get("theme", {}) if resolved_community else None
-    record_versions = current_rdm_records.records_service.search_versions(
-        g.identity, id_=record.id
-    )
-    record_communities = current_rdm_records.record_communities_service.search(
-        g.identity, id_=record.id
-    )
-    record_communities = record_communities.to_dict()["hits"]["hits"]
 
-    # from invenio_rdm_records.resources.config import record_serializers
-    # serializers = current_app.config.get("RDM_RECORDS_SERIALIZERS", record_serializers)
-    default_style = current_app.config.get("RDM_CITATION_STYLES_DEFAULT", None)
-    # default_serializer = serializers.get(default_style, None)
-    # if not default_serializer:
-    #     print("AHA!!!!!")
-    #     print(default_style)
+    versions_key = f"rv:{record.id}:{g.identity.id}"
+    comms_key = f"rc:{record.id}:{g.identity.id}"
+    csl_key = f"re:{record.id}:{g.identity.id}"
 
-    # record_citation = CSLJSONSerializer().dump_obj(record)
-    serializer = CSLJSONSerializer()
-    style = get_style_location(default_style)
-    record_citation = get_citation_string(
-        serializer.dump_obj(record.data),
-        record.id,
-        style,
-        locale=current_i18n.language,
-    )
-    # get_citation_string(json, id, style, locale)
+    if (record_versions := current_cache.get(versions_key)) is None:
+        record_versions = current_rdm_records.records_service.search_versions(
+            g.identity, id_=record.id
+        )
+        record_versions = record_versions.to_dict()["hits"]["hits"]
+        current_cache.set(versions_key, record_versions, 300)
+
+    if (record_communities := current_cache.get(comms_key)) is None:
+        record_communities = current_rdm_records.record_communities_service.search(
+            g.identity, id_=record.id
+        )
+        record_communities = record_communities.to_dict()["hits"]["hits"]
+        current_cache.set(comms_key, record_communities, 300)
+
+    if (record_citation := current_cache.get(csl_key)) is None:
+        # from invenio_rdm_records.resources.config import record_serializers
+        # serializers = current_app.config.get("RDM_RECORDS_SERIALIZERS", record_serializers)
+        default_style = current_app.config.get("RDM_CITATION_STYLES_DEFAULT", None)
+        # default_serializer = serializers.get(default_style, None)
+        # if not default_serializer:
+        #     print("AHA!!!!!")
+        #     print(default_style)
+
+        # record_citation = CSLJSONSerializer().dump_obj(record)
+        serializer = CSLJSONSerializer()
+        style = get_style_location(default_style)
+        record_citation = get_citation_string(
+            serializer.dump_obj(record.data),
+            record.id,
+            style,
+            locale=current_i18n.language,
+        )
+        # get_citation_string(json, id, style, locale)
+        current_cache.set(csl_key, record_citation, 300)
 
     record_requests = (
         current_rdm_records.record_communities_service.get_record_requests(
