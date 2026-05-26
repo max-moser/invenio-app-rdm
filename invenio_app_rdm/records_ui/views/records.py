@@ -19,9 +19,11 @@ from invenio_base.utils import obj_or_import_string
 from invenio_communities.communities.resources.serializer import (
     UICommunityJSONSerializer,
 )
+from invenio_cache import current_cache
 from invenio_communities.errors import CommunityDeletedError
 from invenio_communities.proxies import current_communities
 from invenio_communities.views.communities import render_community_theme_template
+from invenio_i18n.proxies import current_i18n
 from invenio_previewer.extensions import default as default_previewer
 from invenio_previewer.proxies import current_previewer
 from invenio_rdm_records.proxies import current_rdm_records
@@ -29,6 +31,11 @@ from invenio_rdm_records.records.systemfields.access.access_settings import (
     AccessSettings,
 )
 from invenio_rdm_records.resources.serializers import UIJSONSerializer
+from invenio_rdm_records.resources.serializers.csl import (
+    CSLJSONSerializer,
+    get_citation_string,
+    get_style_location,
+)
 from invenio_stats.proxies import current_stats
 from invenio_users_resources.proxies import current_user_resources
 from marshmallow import ValidationError
@@ -236,12 +243,6 @@ def record_detail(
         g.identity, id_=record.id
     )
     record_communities = record_communities.to_dict()["hits"]["hits"]
-    from invenio_i18n.proxies import current_i18n
-    from invenio_rdm_records.resources.serializers.csl import (
-        CSLJSONSerializer,
-        get_citation_string,
-        get_style_location,
-    )
 
     # from invenio_rdm_records.resources.config import record_serializers
     # serializers = current_app.config.get("RDM_RECORDS_SERIALIZERS", record_serializers)
